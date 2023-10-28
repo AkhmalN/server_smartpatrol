@@ -1,8 +1,8 @@
-import patrol from "../model/patrol.js";
+import Patrol from "../model/Patrol.js";
 import User from "../model/User.js";
 // Create
 export const createPatrol = async (req, res, next) => {
-  const newPatrol = new patrol({
+  const newPatrol = new Patrol({
     createdBy: req.body.createdBy,
     userId: req.body.userId,
     name: req.body.name,
@@ -24,7 +24,7 @@ export const createPatrol = async (req, res, next) => {
 // Delete
 export const deletePatrol = async (req, res, next) => {
   try {
-    await patrol.findByIdAndDelete(req.params.id);
+    await Patrol.findByIdAndDelete(req.params.id);
     res.status(200).json("Aktivitas Patroli dihapus");
   } catch (error) {
     next(error);
@@ -34,7 +34,7 @@ export const deletePatrol = async (req, res, next) => {
 // Get detail
 export const getDetailPatrol = async (req, res, next) => {
   try {
-    const findPatrolSpesific = await patrol.findById(req.params.id);
+    const findPatrolSpesific = await Patrol.findById(req.params.id);
     res.status(200).json(findPatrolSpesific);
   } catch (error) {
     next(error);
@@ -44,7 +44,7 @@ export const getDetailPatrol = async (req, res, next) => {
 // Get all
 export const getAllPatrol = async (req, res, next) => {
   try {
-    const patrols = await patrol.find();
+    const patrols = await Patrol.find();
     res.status(200).json(patrols);
   } catch (error) {
     next(error);

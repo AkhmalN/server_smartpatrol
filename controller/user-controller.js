@@ -1,8 +1,7 @@
 import User from "../model/User.js";
 import { createError } from "../utils/error.js";
 import bcrypt from "bcryptjs";
-
-import Patrol from "../model/patrol.js";
+import Patrol from "../model/Patrol.js";
 
 // Create User
 
@@ -76,7 +75,6 @@ export const getUserPatrol = async (req, res, next) => {
     if (!patrols || patrols.length === 0) {
       return res.status(404).json({ message: "Tidak ada patroli ditemukan" });
     }
-
     res.status(200).json(patrols);
   } catch (error) {
     next(error);

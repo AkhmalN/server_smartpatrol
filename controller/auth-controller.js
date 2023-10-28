@@ -1,11 +1,15 @@
 import User from "../model/User.js";
-import { createError } from "../utils/error.js";
+// import { createError } from "../utils/error.js";
+import bcrypt from "bcryptjs";
+
 // import Jwt from "jsonwebtoken";
 
 export const login = async (req, res, next) => {
   try {
     const user = await User.findOne({ username: req.body.username });
-    if (!user) return next(createError(404, "User Tidak ditemukan"));
+    // next(createError(404, "User Tidak ditemukan"))
+    if (!user)
+      return res.status(200).json({ message: "Password atau username Salah" });
 
     const isPasswordCorrect = await bcrypt.compare(
       req.body.password,
@@ -13,7 +17,8 @@ export const login = async (req, res, next) => {
     );
 
     if (!isPasswordCorrect)
-      return next(createError(400, "Password atau Username anda Salah"));
+      // return next(createError(400, "Password atau Username anda Salah"));
+      return res.status(200).json({ message: "Password atau username Salah" });
     // const token = Jwt.sign(
     //   { id: user._id, isAdmin: user.isAdmin },
     //   process.env.JWT
