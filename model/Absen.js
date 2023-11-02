@@ -31,10 +31,12 @@ const AbsenSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-    // image: {
-    //   type: Buffer,
-    //   required: true,
-    // },
+    image: {
+      type: String,
+      // data: Buffer,
+      // contentType: String,
+      // required: true,
+    },
     timestamp: {
       type: Date,
       default: Date.now,
