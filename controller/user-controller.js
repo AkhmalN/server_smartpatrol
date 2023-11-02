@@ -13,6 +13,7 @@ export const createUser = async (req, res, next) => {
       username: req.body.username,
       email: req.body.username,
       password: hash,
+      role: req.body.role,
     });
     await newUser.save();
     if (!newUser) {
