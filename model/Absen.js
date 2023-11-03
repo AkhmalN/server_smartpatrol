@@ -37,10 +37,6 @@ const AbsenSchema = new mongoose.Schema(
       // contentType: String,
       // required: true,
     },
-    timestamp: {
-      type: Date,
-      default: Date.now,
-    },
   },
   { timestamps: true }
 );
