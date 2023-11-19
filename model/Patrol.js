@@ -2,17 +2,17 @@ import mongoose from "mongoose";
 
 const patrolSchema = new mongoose.Schema(
   {
-    createdBy: {
-      type: String,
-      required: true,
-    },
     userId: {
       type: mongoose.Schema.Types.ObjectId,
-      // type: String,
       ref: "User",
       required: true,
     },
-    name: {
+    username: {
+      type: String,
+      ref: "User",
+      required: true,
+    },
+    location: {
       type: String,
       required: true,
     },
@@ -24,17 +24,6 @@ const patrolSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    location: {
-      type: {
-        type: String,
-        enum: ["Point"],
-        required: true,
-      },
-      coordinates: {
-        type: [Number],
-        required: true,
-      },
-    },
     latitude: {
       type: Number,
       required: true,
@@ -43,10 +32,13 @@ const patrolSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-    images: [String],
+    image: {
+      type: String,
+      required: true,
+    },
   },
   {
-    timestamps: true, // This will add createdAt and updatedAt fields
+    timestamps: true,
   }
 );
 

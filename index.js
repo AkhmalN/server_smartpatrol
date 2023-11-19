@@ -4,13 +4,17 @@ dotenv.config();
 import mongoose from "mongoose";
 const PORT = process.env.PORT || 8083;
 const app = express();
+import cors from "cors";
 import authRouter from "./routes/auth-router.js";
 import patrolRouter from "./routes/patrol-router.js";
 import usersRouter from "./routes/user-router.js";
 import absenRouter from "./routes/absen-router.js";
+// import bodyParser from "body-parser";
+
+// app.use(bodyParser.json({ limit: "5mb" }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
+app.use(cors());
 // Middlewares
 app.use("/api/auth", authRouter);
 app.use("/api/patrol", patrolRouter);

@@ -7,13 +7,17 @@ import { dirname } from "path";
 export const createAbsen = async (req, res, next) => {
   try {
     const { userId, username, latitude, longitude } = req.body;
+    if (!req.file) {
+      return res.status(400).json({ error: "No file uploaded." });
+    }
     const image = req.file.filename;
+    console.log(image);
     const newAbsen = new Absen({
       userId,
       username,
       latitude,
       longitude,
-      image: image,
+      image,
     });
     const savedAbsen = await newAbsen.save();
     res.status(201).json({ message: "Berhasil Mengirim Absen", savedAbsen });

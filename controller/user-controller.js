@@ -11,7 +11,7 @@ export const createUser = async (req, res, next) => {
     const hash = bcrypt.hashSync(req.body.password, salt);
     const newUser = new User({
       username: req.body.username,
-      email: req.body.username,
+      email: req.body.email,
       password: hash,
       role: req.body.role,
     });
@@ -60,9 +60,30 @@ export const deleteUser = async (req, res) => {
 
 export const updateUser = async (req, res) => {
   try {
-    const user = await User.findByIdAndUpdate(req.params.id);
+    const { id } = req.params;
+    const { username, email, newPassword, role, image } = req.body;
+    const updatedData = { username, email, role, image };
+    if (newPassword) {
+      if (newPassword.length < 6) {
+        return res
+          .status(400)
+          .json({ message: "password kurang dari 6 karakter" });
+      }
+      const salt = bcrypt.genSaltSync(10);
+      const hashedPassword = bcrypt.hashSync(newPassword, salt);
+      updatedData.password = hashedPassword;
+    }
+    const user = await User.findByIdAndUpdate(id, updatedData, { new: true });
+
+    if (!user) {
+      return res.status(404).json({ message: "Gagal dalam Mengubah Data" });
+    }
+
+    res.status(200).json(user);
   } catch (error) {
-    res.status(404).json({ message: error });
+    res
+      .status(500)
+      .json({ message: "Internal Server Error", error: error.message });
   }
 };
 
@@ -70,8 +91,7 @@ export const updateUser = async (req, res) => {
 
 export const getUserPatrol = async (req, res, next) => {
   try {
-    const userId = req.params.id;
-    const patrols = await Patrol.find({ userId });
+    const patrols = await Patrol.find({ createdBy: createdBy });
 
     if (!patrols || patrols.length === 0) {
       return res.status(404).json({ message: "Tidak ada patroli ditemukan" });

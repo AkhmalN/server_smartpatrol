@@ -1,21 +1,25 @@
 import Patrol from "../model/Patrol.js";
-import User from "../model/User.js";
+import { dirname } from "path";
+
 // Create
 export const createPatrol = async (req, res, next) => {
-  const newPatrol = new Patrol({
-    createdBy: req.body.createdBy,
-    userId: req.body.userId,
-    name: req.body.name,
-    status: req.body.status,
-    notes: req.body.notes,
-    location: req.body.location,
-    latitude: req.body.latitude,
-    longitude: req.body.longitude,
-  });
-
   try {
-    const savedPatrol = await newPatrol.save();
-    res.status(200).json({ message: "Berhasil Mengirim patroli", savedPatrol });
+    const { userId, username, location, status, notes, latitude, longitude } =
+      req.body;
+    const image = req.file.filename;
+    console.log(image);
+    const newPatrol = new Patrol({
+      userId,
+      username,
+      location,
+      status,
+      notes,
+      latitude,
+      longitude,
+      image,
+    });
+    const savedPatrol = newPatrol.save();
+    res.status(201).json({ message: "berhasil membuat patroli", savedPatrol });
   } catch (error) {
     next(error);
   }

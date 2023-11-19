@@ -12,17 +12,6 @@ const AbsenSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    // location: {
-    //   type: {
-    //     type: String,
-    //     enum: ["Point"],
-    //     required: true,
-    //   },
-    //   coordinates: {
-    //     type: [Number],
-    //     required: true,
-    //   },
-    // },
     latitude: {
       type: Number,
       required: true,
@@ -33,9 +22,7 @@ const AbsenSchema = new mongoose.Schema(
     },
     image: {
       type: String,
-      // data: Buffer,
-      // contentType: String,
-      // required: true,
+      required: true,
     },
   },
   { timestamps: true }

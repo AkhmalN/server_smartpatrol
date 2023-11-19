@@ -18,7 +18,7 @@ export const login = async (req, res, next) => {
 
     if (!isPasswordCorrect)
       // return next(createError(400, "Password atau Username anda Salah"));
-      return res.status(200).json({ message: "Password atau username Salah" });
+      return res.status(401).json({ message: "Password atau username Salah" });
     // const token = Jwt.sign(
     //   { id: user._id, isAdmin: user.isAdmin },
     //   process.env.JWT
@@ -30,8 +30,8 @@ export const login = async (req, res, next) => {
       //   httpOnly: true,
       // })
       .status(201)
-      .send("Login succses");
+      .send({ message: "Login succses" });
   } catch (error) {
-    next(error);
+    res.status(500).json({ message: "Terjadi Kesalahan Saat Login" });
   }
 };

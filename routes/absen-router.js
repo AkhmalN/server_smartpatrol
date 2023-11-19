@@ -8,15 +8,16 @@ import {
 import multer from "multer";
 
 const router = express.Router();
-const storage = multer.diskStorage({
+const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "uploads/");
+    cb(null, "../uploads/absen");
+    // cb(null, "uploads");
   },
   filename: (req, file, cb) => {
-    cb(null, file.originalname);
+    cb(null, new Date().getTime() + "-" + file.originalname);
   },
 });
-const upload = multer({ storage: storage });
+const upload = multer({ storage: fileStorage });
 
 // Create Absen
 router.post("/", upload.single("image"), createAbsen);
