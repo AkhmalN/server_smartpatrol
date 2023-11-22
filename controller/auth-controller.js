@@ -30,7 +30,7 @@ export const login = async (req, res, next) => {
       //   httpOnly: true,
       // })
       .status(201)
-      .send({ message: "Login succses" });
+      .send({ message: "Login succses", userId: user._id });
   } catch (error) {
     res.status(500).json({ message: "Terjadi Kesalahan Saat Login" });
   }
