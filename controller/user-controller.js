@@ -101,9 +101,3 @@ export const getUserPatrol = async (req, res, next) => {
     next(error);
   }
 };
-
-// export const getUserPatrol = async (req, res, next) => {
-//   const patrols = await Patrol.findById(req.params.createdBy);
-//   res.status(201).json(patrols);
-//   // res.send("User patrol endpoint");
-// };

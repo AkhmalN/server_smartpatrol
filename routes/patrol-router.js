@@ -4,6 +4,7 @@ import {
   deletePatrol,
   getAllPatrol,
   getDetailPatrol,
+  updatePatrol,
 } from "../controller/patrol-controller.js";
 const router = express.Router();
 import multer from "multer";
@@ -12,17 +13,13 @@ import multer from "multer";
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "../uploads/patroli");
-    // cb(null, "uploads");
   },
   filename: (req, file, cb) => {
-    cb(null, new Date().getTime() + "-" + file.originalname);
+    cb(null, file.fieldname + "-" + Date.now() + "-" + file.originalname);
   },
 });
 const upload = multer({ storage: fileStorage });
 router.post("/", upload.single("image"), createPatrol);
-
-// Delete
-router.delete("/:id", deletePatrol);
 
 // Get id
 router.get("/:id", getDetailPatrol);
@@ -30,4 +27,9 @@ router.get("/:id", getDetailPatrol);
 // Get All
 router.get("/", getAllPatrol);
 
+// Update
+router.put("/:id", updatePatrol);
+
+// Delete
+router.delete("/:id", deletePatrol);
 export default router;

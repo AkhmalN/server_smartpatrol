@@ -9,17 +9,22 @@ import authRouter from "./routes/auth-router.js";
 import patrolRouter from "./routes/patrol-router.js";
 import usersRouter from "./routes/user-router.js";
 import absenRouter from "./routes/absen-router.js";
-// import bodyParser from "body-parser";
+import path from "path";
 
-// app.use(bodyParser.json({ limit: "5mb" }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
+
+// Use import.meta.url to get the current module's URL
+const __filename = new URL(import.meta.url).pathname;
+// Use path.dirname to extract the directory name
+const __dirname = path.dirname(__filename);
 // Middlewares
-app.use("/api/auth", authRouter);
-app.use("/api/patrol", patrolRouter);
-app.use("/api/users", usersRouter);
-app.use("/api/absensi", absenRouter);
+// app.use(express.static(path.join(__dirname, "public/uploads")));
+app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/patrol", patrolRouter);
+app.use("/api/v1/users", usersRouter);
+app.use("/api/v1/absensi", absenRouter);
 
 mongoose
   .connect(process.env.MONGODB_URI)

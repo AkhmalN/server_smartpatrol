@@ -25,16 +25,6 @@ export const createPatrol = async (req, res, next) => {
   }
 };
 
-// Delete
-export const deletePatrol = async (req, res, next) => {
-  try {
-    await Patrol.findByIdAndDelete(req.params.id);
-    res.status(200).json("Aktivitas Patroli dihapus");
-  } catch (error) {
-    next(error);
-  }
-};
-
 // Get detail
 export const getDetailPatrol = async (req, res, next) => {
   try {
@@ -50,6 +40,23 @@ export const getAllPatrol = async (req, res, next) => {
   try {
     const patrols = await Patrol.find();
     res.status(200).json(patrols);
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Update
+
+export const updatePatrol = async (req, res) => {
+  try {
+  } catch (error) {}
+};
+
+// Delete
+export const deletePatrol = async (req, res, next) => {
+  try {
+    await Patrol.findByIdAndDelete(req.params.id);
+    res.status(200).json("Aktivitas Patroli dihapus!");
   } catch (error) {
     next(error);
   }
