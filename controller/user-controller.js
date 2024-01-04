@@ -4,7 +4,6 @@ import bcrypt from "bcryptjs";
 import Patrol from "../model/Patrol.js";
 
 // Create User
-
 export const createUser = async (req, res, next) => {
   try {
     const salt = bcrypt.genSaltSync(10);
@@ -25,7 +24,7 @@ export const createUser = async (req, res, next) => {
   }
 };
 
-// Get Specific
+// Get user
 export const getUser = async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
@@ -36,7 +35,7 @@ export const getUser = async (req, res) => {
   }
 };
 
-// Get all
+// Get users
 export const getAllUser = async (req, res) => {
   try {
     const users = await User.find();
@@ -46,7 +45,7 @@ export const getAllUser = async (req, res) => {
   }
 };
 
-// Delete
+// Delete user
 export const deleteUser = async (req, res) => {
   try {
     await User.findByIdAndDelete(req.params.id);
@@ -56,21 +55,21 @@ export const deleteUser = async (req, res) => {
   }
 };
 
-// Update Users
+// Update User
 
 export const updateUser = async (req, res) => {
   try {
     const { id } = req.params;
-    const { username, email, newPassword, role, image } = req.body;
-    const updatedData = { username, email, role, image };
-    if (newPassword) {
-      if (newPassword.length < 6) {
+    const { username, email, password, role, image } = req.body;
+    const updatedData = { username, email, role, image, password };
+    if (password) {
+      if (password.length < 6) {
         return res
           .status(400)
           .json({ message: "password kurang dari 6 karakter" });
       }
       const salt = bcrypt.genSaltSync(10);
-      const hashedPassword = bcrypt.hashSync(newPassword, salt);
+      const hashedPassword = bcrypt.hashSync(password, salt);
       updatedData.password = hashedPassword;
     }
     const user = await User.findByIdAndUpdate(id, updatedData, { new: true });

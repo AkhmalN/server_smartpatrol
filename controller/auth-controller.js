@@ -8,8 +8,7 @@ export const login = async (req, res, next) => {
   try {
     const user = await User.findOne({ username: req.body.username });
     // next(createError(404, "User Tidak ditemukan"))
-    if (!user)
-      return res.status(200).json({ message: "Password atau username Salah" });
+    if (!user) return res.status(400).json({ message: "User tidak ditemukan" });
 
     const isPasswordCorrect = await bcrypt.compare(
       req.body.password,
@@ -17,20 +16,9 @@ export const login = async (req, res, next) => {
     );
 
     if (!isPasswordCorrect)
-      // return next(createError(400, "Password atau Username anda Salah"));
       return res.status(401).json({ message: "Password atau username Salah" });
-    // const token = Jwt.sign(
-    //   { id: user._id, isAdmin: user.isAdmin },
-    //   process.env.JWT
-    // );
-    // const { password, isAdmin, ...otherDetails } = user._doc;
 
-    res
-      // .cookie("access token ", token, {
-      //   httpOnly: true,
-      // })
-      .status(201)
-      .send({ message: "Login succses", userId: user._id });
+    res.status(200).send({ message: "Login succses", userId: user._id });
   } catch (error) {
     res.status(500).json({ message: "Terjadi Kesalahan Saat Login" });
   }
