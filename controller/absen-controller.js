@@ -7,9 +7,7 @@ import fs from "fs";
 export const createAbsen = async (req, res, next) => {
   try {
     const { username, latitude, longitude } = req.body;
-    if (!req.file) {
-      return res.status(400).json({ error: "No file uploaded." });
-    }
+
     const imageBuffer = fs.readFileSync(
       path.join("public/uploads", req.file.filename)
     );
@@ -20,15 +18,12 @@ export const createAbsen = async (req, res, next) => {
       username,
       latitude,
       longitude,
-      image: {
-        data: imageBuffer,
-        contentType: "image/png", // Sesuaikan dengan tipe gambar yang diunggah
-      },
+      image: imageBuffer,
     });
     const savedAbsen = await newAbsen.save();
     res.status(201).json({
       message: "Berhasil Mengirim Absen",
-      savedAbsen: { ...savedAbsen._doc, image: undefined },
+      savedAbsen: { ...savedAbsen._doc },
     });
   } catch (error) {
     next(error);
