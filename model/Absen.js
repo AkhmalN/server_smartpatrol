@@ -12,7 +12,7 @@ const AbsenSchema = new mongoose.Schema(
     longitude: {
       type: Number,
     },
-    image: Buffer,
+    image: String,
   },
   { timestamps: true }
 );

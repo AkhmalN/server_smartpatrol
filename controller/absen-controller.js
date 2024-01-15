@@ -8,17 +8,17 @@ export const createAbsen = async (req, res, next) => {
   try {
     const { username, latitude, longitude } = req.body;
 
-    const imageBuffer = fs.readFileSync(
-      path.join("public/uploads", req.file.filename)
-    );
-    // const image =
-    //   req.protocol + "://" + req.get("host") + "/absen/" + req.file.filename;
+    // const imageBuffer = fs.readFileSync(
+    //   path.join("public/uploads", req.file.filename)
+    // );
+    const imagePath = path.join("public/uploads", req.file.filename);
+
     console.log(req.file.filename);
     const newAbsen = new Absen({
       username,
       latitude,
       longitude,
-      image: imageBuffer,
+      image: imagePath,
     });
     const savedAbsen = await newAbsen.save();
     res.status(201).json({
@@ -71,9 +71,10 @@ export const deleteAbsen = async (req, res) => {
 export const showImage = async (req, res, next) => {
   try {
     const filename = req.params.filename;
+    console.log(filename);
     const currentFileUrl = import.meta.url;
     const currentDirPath = dirname(fileURLToPath(currentFileUrl));
-    const imagePath = path.join(currentDirPath, "..", "uploads", filename);
+    const imagePath = path.join(currentDirPath, "uploads", filename);
     res.sendFile(imagePath);
   } catch (error) {
     next(error);

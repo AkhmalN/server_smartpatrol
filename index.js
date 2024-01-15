@@ -9,6 +9,7 @@ import authRouter from "./routes/auth-router.js";
 import patrolRouter from "./routes/patrol-router.js";
 import usersRouter from "./routes/user-router.js";
 import absenRouter from "./routes/absen-router.js";
+import posRouter from "./routes/pos-router.js";
 import path from "path";
 
 app.use(express.json());
@@ -20,11 +21,12 @@ const __filename = new URL(import.meta.url).pathname;
 // Use path.dirname to extract the directory name
 const __dirname = path.dirname(__filename);
 // Middlewares
-// app.use(express.static(path.join(__dirname, "public/uploads")));
+app.use(express.static("public"));
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/patrol", patrolRouter);
 app.use("/api/v1/users", usersRouter);
 app.use("/api/v1/absensi", absenRouter);
+app.use("/api/v1/pos", posRouter);
 
 mongoose
   .connect(process.env.MONGODB_URI)
