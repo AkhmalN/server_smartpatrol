@@ -40,11 +40,27 @@ export const getPosCollection = async (req, res) => {
   try {
     const data = await Pos.findOne(req.params.id);
     if (!data) {
-      res.status(200).json({ message: "cannot data to show" });
+      res.status(404).json({ message: "Data not found!" });
     }
-    res.status(200).json({ message: "cannot djknbsfmdlnjbajndnb" });
+    res.status(200).json({ message: "Success get", data });
   } catch {
-    res.status(500).json({ message: "Error Server! klninnsbbfmnjh" });
+    res.status(500).json({ message: "Internal server error!" });
+  }
+};
+
+export const updatePosCollection = async (req, res) => {
+  try {
+    const { ID } = req.params.id;
+    const { title, latitude, longitude } = req.body;
+    const updatedData = { title, latitude, longitude };
+    const dataPos = await Pos.findByIdAndUpdate(ID, updatedData, { new: true });
+    if (!dataPos) {
+      return res.status(404).json({ message: "Something wrong!" });
+    } else {
+      return res.status(200).json({ message: "Successfully update!" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error!" });
   }
 };
 

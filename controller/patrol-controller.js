@@ -1,13 +1,11 @@
 import Patrol from "../model/Patrol.js";
-import { dirname } from "path";
 
 // Create
 export const createPatrol = async (req, res, next) => {
   try {
     const { userId, username, location, status, notes, latitude, longitude } =
       req.body;
-    const image = req.file.filename;
-    console.log(image);
+    const imagePath = path.join("public/patroli", req.file.filename);
     const newPatrol = new Patrol({
       userId,
       username,
@@ -16,21 +14,12 @@ export const createPatrol = async (req, res, next) => {
       notes,
       latitude,
       longitude,
-      image,
+      image: imagePath,
     });
     const savedPatrol = newPatrol.save();
-    res.status(201).json({ message: "berhasil membuat patroli", savedPatrol });
+    res.status(201).json({ message: "Success created patrols", savedPatrol });
   } catch (error) {
-    next(error);
-  }
-};
-
-// Get detail
-export const getDetailPatrol = async (req, res, next) => {
-  try {
-    const findPatrolSpesific = await Patrol.findById(req.params.id);
-    res.status(200).json(findPatrolSpesific);
-  } catch (error) {
+    res.status(500).json({ message: "Internal server error!" });
     next(error);
   }
 };
@@ -39,8 +28,36 @@ export const getDetailPatrol = async (req, res, next) => {
 export const getAllPatrol = async (req, res, next) => {
   try {
     const patrols = await Patrol.find();
-    res.status(200).json(patrols);
+    res.status(201).json({ message: "Success get", patrols });
   } catch (error) {
+    res.status(404).json({ mesaage: "Data not found!" });
+    next(error);
+  }
+};
+
+// Get detail
+export const getDetailPatrol = async (req, res, next) => {
+  try {
+    const findPatrolSpesific = await Patrol.findById(req.params.id);
+    res.status(201).json({ message: "Success get", findPatrolSpesific });
+  } catch (error) {
+    res.status(404).json({ message: "Data not found!" });
+    next(error);
+  }
+};
+
+export const getUserPatrol = async (req, res, next) => {
+  try {
+    const userId = req.params.id;
+    const patrol = await Patrol.findOne({ userId });
+
+    if (patrol) {
+      res.status(201).json({ message: "Success get", patrol });
+    } else {
+      res.status(404).json({ message: "Data not found!" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error!" });
     next(error);
   }
 };
@@ -56,8 +73,9 @@ export const updatePatrol = async (req, res) => {
 export const deletePatrol = async (req, res, next) => {
   try {
     await Patrol.findByIdAndDelete(req.params.id);
-    res.status(200).json("Aktivitas Patroli dihapus!");
+    res.status(201).json({ message: "Data has been deleted!" });
   } catch (error) {
+    res.status(500).json({ message: "Internal server error!" });
     next(error);
   }
 };

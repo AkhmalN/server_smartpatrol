@@ -11,12 +11,14 @@ const userSchema = new mongoose.Schema(
     password: {
       type: String,
     },
+    no_hp: {
+      type: String,
+    },
     role: {
       type: String,
     },
     image: {
-      data: Buffer,
-      contentType: String,
+      type: String,
     },
   },
   { timestamps: true }

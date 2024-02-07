@@ -2,6 +2,10 @@ import mongoose from "mongoose";
 
 const AbsenSchema = new mongoose.Schema(
   {
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
     username: {
       type: String,
       ref: "User",

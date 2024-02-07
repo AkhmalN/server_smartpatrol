@@ -2,24 +2,29 @@ import User from "../model/User.js";
 import { createError } from "../utils/error.js";
 import bcrypt from "bcryptjs";
 import Patrol from "../model/Patrol.js";
+import path from "path";
 
 // Create User
 export const createUser = async (req, res, next) => {
   try {
-    const salt = bcrypt.genSaltSync(10);
-    const hash = bcrypt.hashSync(req.body.password, salt);
+    // const salt = bcrypt.genSaltSync(10);
+    // const hash = bcrypt.hashSync(req.body.password, salt);
+    const imagePath = path.join("public/profil", req.file.filename);
     const newUser = new User({
       username: req.body.username,
       email: req.body.email,
-      password: hash,
+      password: req.body.password,
       role: req.body.role,
+      no_hp: req.body.no_hp,
+      image: imagePath,
     });
     await newUser.save();
     if (!newUser) {
-      return res.json({ message: "terjadi Kesalahan" });
+      res.status(404).json({ message: "Something wrong!" });
     }
-    res.status(201).json({ message: "User Ditambahkan" });
+    res.status(201).json({ message: "Success add user!" });
   } catch (error) {
+    res.status(500).json({ message: "Internal server error!" });
     next(error);
   }
 };
@@ -28,8 +33,8 @@ export const createUser = async (req, res, next) => {
 export const getUser = async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
-    if (!user) res.status(200).json({ message: "User Tidak Ditemukan" });
-    res.status(200).json({ message: "Berhasil mendapat user", user });
+    if (!user) res.status(404).json({ message: "User not found!" });
+    res.status(200).json({ message: "Success get", user });
   } catch (error) {
     res.status(404).json({ message: error });
   }
@@ -39,9 +44,13 @@ export const getUser = async (req, res) => {
 export const getAllUser = async (req, res) => {
   try {
     const users = await User.find();
-    res.status(200).json(users);
+    if (users.length === 0) {
+      return res.status(404).json({ message: "Data not found or empty!" });
+    } else {
+      return res.status(200).json({ message: "Success get", users });
+    }
   } catch (error) {
-    res.status(404).json({ message: error });
+    res.status(404).json({ message: "Internal server error!" });
   }
 };
 
@@ -60,18 +69,8 @@ export const deleteUser = async (req, res) => {
 export const updateUser = async (req, res) => {
   try {
     const { id } = req.params;
-    const { username, email, password, role, image } = req.body;
-    const updatedData = { username, email, role, image, password };
-    if (password) {
-      if (password.length < 6) {
-        return res
-          .status(400)
-          .json({ message: "password kurang dari 6 karakter" });
-      }
-      const salt = bcrypt.genSaltSync(10);
-      const hashedPassword = bcrypt.hashSync(password, salt);
-      updatedData.password = hashedPassword;
-    }
+    const { username, email, password, role, image, no_hp } = req.body;
+    const updatedData = { username, email, role, image, password, no_hp };
     const user = await User.findByIdAndUpdate(id, updatedData, { new: true });
 
     if (!user) {

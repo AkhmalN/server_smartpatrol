@@ -1,43 +1,29 @@
 import Absen from "../model/Absen.js";
+import User from "../model/User.js";
 import path from "path";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
-import fs from "fs";
+
 // Create Absen
 export const createAbsen = async (req, res, next) => {
   try {
-    const { username, latitude, longitude } = req.body;
-
-    // const imageBuffer = fs.readFileSync(
-    //   path.join("public/uploads", req.file.filename)
-    // );
-    const imagePath = path.join("public/uploads", req.file.filename);
+    const { userId, username, latitude, longitude } = req.body;
+    const imagePath = path.join("public/absensi", req.file.filename);
 
     console.log(req.file.filename);
     const newAbsen = new Absen({
+      userId,
       username,
       latitude,
       longitude,
       image: imagePath,
     });
-    const savedAbsen = await newAbsen.save();
+    await newAbsen.save();
     res.status(201).json({
-      message: "Berhasil Mengirim Absen",
-      savedAbsen: { ...savedAbsen._doc },
+      message: "Success send data",
     });
   } catch (error) {
-    next(error);
-  }
-};
-
-// Get Absen
-
-export const getDetailAbsen = async (req, res, next) => {
-  try {
-    const absen = await Absen.findById(req.params.id);
-    res.status(201).json({ message: "detail absen for", absen });
-  } catch (error) {
-    res.status(404).json({ message: "Detail tidak ditemukan" });
+    res.status(404).json({ message: "Internal server error!" });
     next(error);
   }
 };
@@ -46,9 +32,38 @@ export const getDetailAbsen = async (req, res, next) => {
 export const getAllAbsen = async (req, res, next) => {
   try {
     const absen = await Absen.find();
-    res.status(201).json(absen);
+    res.status(201).json({ message: "Success get", absen });
   } catch (error) {
-    res.status(404).json({ message: "Terjadi Kesalahan" });
+    res.status(404).json({ message: "Internal server error!" });
+    next(error);
+  }
+};
+
+// Get Detail Absen
+
+export const getDetailAbsen = async (req, res, next) => {
+  try {
+    const absen = await Absen.findById(req.params.id);
+    res.status(201).json({ message: "Success get", absen });
+  } catch (error) {
+    res.status(404).json({ message: "Data no found!" });
+    next(error);
+  }
+};
+
+// Get User Absen
+export const getUserAbsen = async (req, res, next) => {
+  try {
+    const userId = req.params.id;
+    const absen = await Absen.findOne({ userId });
+
+    if (absen) {
+      res.status(201).json({ message: "Success get", absen });
+    } else {
+      res.status(404).json({ message: "Data not found!" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error!" });
     next(error);
   }
 };
@@ -61,9 +76,9 @@ export const updateAbsen = async (req, res) => {};
 export const deleteAbsen = async (req, res) => {
   try {
     await Absen.findByIdAndDelete(req.params.id);
-    res.status(201).json({ message: "Absensi Telah di hapus!" });
+    res.status(201).json({ message: "Data has been deleted!" });
   } catch (error) {
-    return res.status(404).json({ message: "Terjadi kesalahan pada server!" });
+    return res.status(404).json({ message: "Internal server error!" });
   }
 };
 

@@ -4,6 +4,7 @@ import {
   deleteAbsen,
   getAllAbsen,
   getDetailAbsen,
+  getUserAbsen,
   showImage,
   updateAbsen,
 } from "../controller/absen-controller.js";
@@ -13,7 +14,7 @@ import path from "path";
 const router = express.Router();
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "./public/uploads");
+    cb(null, "./public/absensi");
   },
   filename: (req, file, cb) => {
     cb(
@@ -34,8 +35,10 @@ router.post("/", upload.single("image"), createAbsen);
 // Get all Absen
 router.get("/", getAllAbsen);
 
-// Get Absen
+// Get detail Absen
 router.get("/:id", getDetailAbsen);
+
+router.get("/user/:id", getUserAbsen);
 
 // Update Absen
 router.put("/:id", updateAbsen);

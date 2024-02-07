@@ -1,16 +1,19 @@
 import express from "express";
 import dotenv from "dotenv";
-dotenv.config();
 import mongoose from "mongoose";
-const PORT = process.env.PORT || 8083;
-const app = express();
 import cors from "cors";
 import authRouter from "./routes/auth-router.js";
 import patrolRouter from "./routes/patrol-router.js";
 import usersRouter from "./routes/user-router.js";
 import absenRouter from "./routes/absen-router.js";
 import posRouter from "./routes/pos-router.js";
+import activityRouter from "./routes/activity-router.js";
 import path from "path";
+
+dotenv.config();
+
+const PORT = process.env.PORT || 8083;
+const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -27,6 +30,7 @@ app.use("/api/v1/patrol", patrolRouter);
 app.use("/api/v1/users", usersRouter);
 app.use("/api/v1/absensi", absenRouter);
 app.use("/api/v1/pos", posRouter);
+app.use("/api/v1/aktivitas", activityRouter);
 
 mongoose
   .connect(process.env.MONGODB_URI)
