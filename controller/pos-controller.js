@@ -27,7 +27,7 @@ export const createPosCollection = async (req, res) => {
 
 export const getsPosCollection = async (req, res) => {
   try {
-    const data = Pos.find();
+    const data = await Pos.find();
     if ((await data).length < 1) {
       return res.status(404).json({ message: "Tidak ada data yang ditemukan" });
     }
