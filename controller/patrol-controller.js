@@ -1,4 +1,5 @@
 import Patrol from "../model/Patrol.js";
+import path from "path";
 
 // Create
 export const createPatrol = async (req, res, next) => {
@@ -16,8 +17,10 @@ export const createPatrol = async (req, res, next) => {
       longitude,
       image: imagePath,
     });
-    const savedPatrol = newPatrol.save();
-    res.status(201).json({ message: "Success created patrols", savedPatrol });
+    const savedPatrol = await newPatrol.save();
+    res
+      .status(201)
+      .json({ message: "Success created patrols", data: savedPatrol });
   } catch (error) {
     res.status(500).json({ message: "Internal server error!" });
     next(error);

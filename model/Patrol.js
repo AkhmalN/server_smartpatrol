@@ -25,10 +25,7 @@ const patrolSchema = new mongoose.Schema(
     longitude: {
       type: Number,
     },
-    image: {
-      data: Buffer,
-      contentType: String,
-    },
+    image: String,
   },
   {
     timestamps: true,
