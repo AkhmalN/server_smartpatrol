@@ -19,7 +19,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
-    origin: "https://server-smartpatrol.vercel.app",
+    origin: ["https://server-smartpatrol.vercel.app"],
+    methods: ["POST", "GET", "PUT", "PATCH", "DELETE"],
   })
 );
 
