@@ -51,16 +51,16 @@ export const getDetailPatrol = async (req, res, next) => {
 
 export const getUserPatrol = async (req, res, next) => {
   try {
-    const userId = req.params.id;
-    const patrol = await Patrol.findOne({ userId });
+    const patrol = await Patrol.find({ userId: req.params.id });
 
-    if (patrol) {
-      res.status(201).json({ message: "Success get", patrol });
-    } else {
-      res.status(404).json({ message: "Data not found!" });
+    if (!patrol || patrol.length === 0) {
+      return res.status(404).json({ message: "Data tidak ditemukan" });
     }
+
+    res.status(200).json(patrol);
   } catch (error) {
-    res.status(500).json({ message: "Internal server error!" });
+    res.status(500).json({ message: "Terjadi kesalahan internal server" });
+
     next(error);
   }
 };

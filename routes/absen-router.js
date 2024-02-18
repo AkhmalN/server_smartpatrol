@@ -38,6 +38,7 @@ router.get("/", getAllAbsen);
 // Get detail Absen
 router.get("/:id", getDetailAbsen);
 
+// Get user Absen
 router.get("/user/:id", getUserAbsen);
 
 // Update Absen

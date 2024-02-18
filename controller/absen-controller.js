@@ -54,16 +54,16 @@ export const getDetailAbsen = async (req, res, next) => {
 // Get User Absen
 export const getUserAbsen = async (req, res, next) => {
   try {
-    const userId = req.params.id;
-    const absen = await Absen.findOne({ userId });
+    const absen = await Absen.find({ userId: req.params.id });
 
-    if (absen) {
-      res.status(201).json({ message: "Success get", absen });
-    } else {
-      res.status(404).json({ message: "Data not found!" });
+    if (!absen || absen.length === 0) {
+      return res.status(404).json({ message: "Data tidak ditemukan" });
     }
+
+    res.status(200).json(absen);
   } catch (error) {
-    res.status(500).json({ message: "Internal server error!" });
+    res.status(500).json({ message: "Terjadi kesalahan internal server" });
+
     next(error);
   }
 };
