@@ -9,14 +9,12 @@ export const createUser = async (req, res, next) => {
   try {
     // const salt = bcrypt.genSaltSync(10);
     // const hash = bcrypt.hashSync(req.body.password, salt);
-    const imagePath = path.join("public/profil", req.file.filename);
     const newUser = new User({
       username: req.body.username,
       email: req.body.email,
       password: req.body.password,
       role: req.body.role,
       no_hp: req.body.no_hp,
-      image: imagePath,
     });
     await newUser.save();
     if (!newUser) {
