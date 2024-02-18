@@ -17,12 +17,6 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(
-  cors({
-    origin: ["https://server-smartpatrol.vercel.app"],
-    methods: ["POST", "GET", "PUT", "PATCH", "DELETE"],
-  })
-);
 
 // Use import.meta.url to get the current module's URL
 const __filename = new URL(import.meta.url).pathname;
