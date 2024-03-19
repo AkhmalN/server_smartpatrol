@@ -18,9 +18,7 @@ export const createPatrol = async (req, res, next) => {
       image: imagePath,
     });
     const savedPatrol = await newPatrol.save();
-    res
-      .status(201)
-      .json({ message: "Success created patrols", data: savedPatrol });
+    res.status(201).json({ message: "Success created patrols" });
   } catch (error) {
     res.status(500).json({ message: "Internal server error!" });
     next(error);
@@ -31,7 +29,7 @@ export const createPatrol = async (req, res, next) => {
 export const getAllPatrol = async (req, res, next) => {
   try {
     const patrols = await Patrol.find();
-    res.status(201).json({ message: "Success get", patrols });
+    res.status(201).json({ message: "Success GET method", patrols });
   } catch (error) {
     res.status(404).json({ mesaage: "Data not found!" });
     next(error);

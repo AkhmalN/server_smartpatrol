@@ -3,7 +3,6 @@ import {
   getUser,
   getAllUser,
   deleteUser,
-  getUserPatrol,
   createUser,
   updateUser,
 } from "../controller/user-controller.js";

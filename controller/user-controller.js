@@ -1,26 +1,39 @@
 import User from "../model/User.js";
-import { createError } from "../utils/error.js";
-import bcrypt from "bcryptjs";
-import Patrol from "../model/Patrol.js";
-import path from "path";
 
 // Create User
 export const createUser = async (req, res, next) => {
   try {
-    // const salt = bcrypt.genSaltSync(10);
-    // const hash = bcrypt.hashSync(req.body.password, salt);
+    const {
+      username,
+      email,
+      password,
+      role,
+      no_hp,
+      domisili,
+      nik,
+      tempat_lahir,
+      tanggal_lahir,
+      unit_kerja,
+    } = req.body;
+
     const newUser = new User({
-      username: req.body.username,
-      email: req.body.email,
-      password: req.body.password,
-      role: req.body.role,
-      no_hp: req.body.no_hp,
+      username,
+      email,
+      password,
+      role,
+      no_hp,
+      domisili,
+      nik,
+      tempat_lahir,
+      tanggal_lahir,
+      unit_kerja,
     });
+
     await newUser.save();
     if (!newUser) {
-      res.status(404).json({ message: "Something wrong!" });
+      res.status(404).json({ message: "Terjadi kesalahan" });
     }
-    res.status(201).json({ message: "Success add user!" });
+    res.status(201).json({ message: "Success POST method!" });
   } catch (error) {
     res.status(500).json({ message: "Internal server error!" });
     next(error);
@@ -31,10 +44,12 @@ export const createUser = async (req, res, next) => {
 export const getUser = async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
-    if (!user) res.status(404).json({ message: "User not found!" });
-    res.status(200).json({ message: "Success get", user });
+    if (!user) {
+      return res.status(404).json({ message: "User not found!" });
+    }
+    res.status(200).json({ message: "Success GET method", user });
   } catch (error) {
-    res.status(404).json({ message: error });
+    res.status(500).json({ message: "internal server error" });
   }
 };
 
@@ -42,11 +57,10 @@ export const getUser = async (req, res) => {
 export const getAllUser = async (req, res) => {
   try {
     const users = await User.find();
-    if (users.length === 0) {
+    if (!users || users.length === 0) {
       return res.status(404).json({ message: "Data not found or empty!" });
-    } else {
-      return res.status(200).json({ message: "Success get", users });
     }
+    res.status(200).json({ message: "Success GET method", users });
   } catch (error) {
     res.status(404).json({ message: "Internal server error!" });
   }
@@ -56,44 +70,50 @@ export const getAllUser = async (req, res) => {
 export const deleteUser = async (req, res) => {
   try {
     await User.findByIdAndDelete(req.params.id);
-    res.status(200).json("User telah dihapus");
+    res.status(200).json({ message: "User telah dihapus" });
   } catch (error) {
     res.status(404).json({ message: error });
   }
 };
 
 // Update User
-
 export const updateUser = async (req, res) => {
   try {
     const { id } = req.params;
-    const { username, email, password, role, image, no_hp } = req.body;
-    const updatedData = { username, email, role, image, password, no_hp };
+    const {
+      username,
+      email,
+      password,
+      role,
+      no_hp,
+      domisili,
+      nik,
+      tempat_lahir,
+      tanggal_lahir,
+    } = req.body;
+    const updatedData = {
+      username,
+      email,
+      password,
+      role,
+      no_hp,
+      domisili,
+      nik,
+      tempat_lahir,
+      tanggal_lahir,
+    };
     const user = await User.findByIdAndUpdate(id, updatedData, { new: true });
 
     if (!user) {
-      return res.status(404).json({ message: "Gagal dalam Mengubah Data" });
+      return res
+        .status(404)
+        .json({ message: `cannot find any user with ID ${id}` });
     }
 
-    res.status(200).json(user);
+    res.status(200).json({ message: "Success UPDATE method", user });
   } catch (error) {
     res
       .status(500)
       .json({ message: "Internal Server Error", error: error.message });
-  }
-};
-
-// !Patrol
-
-export const getUserPatrol = async (req, res, next) => {
-  try {
-    const patrols = await Patrol.find({ createdBy: createdBy });
-
-    if (!patrols || patrols.length === 0) {
-      return res.status(404).json({ message: "Tidak ada patroli ditemukan" });
-    }
-    res.status(200).json(patrols);
-  } catch (error) {
-    next(error);
   }
 };

@@ -10,7 +10,6 @@ export const createAbsen = async (req, res, next) => {
     const { userId, username, latitude, longitude } = req.body;
     const imagePath = path.join("public/absensi", req.file.filename);
 
-    console.log(req.file.filename);
     const newAbsen = new Absen({
       userId,
       username,
